@@ -69,3 +69,22 @@
         "typescript": "^4.8.2"
     }
 }
+// file: listen.js
+import { TikTokLiveConnection, WebcastEvent } from 'tiktok-live-connector';
+
+const tiktokUsername = 'YOUR_USERNAME_HERE';  // replace with your TikTok username
+
+const connection = new TikTokLiveConnection(tiktokUsername, {
+  enableExtendedGiftInfo: true
+});
+
+connection.connect()
+  .then(state => {
+    console.log(`Connected to roomId ${state.roomId}`);
+    connection.on(WebcastEvent.GIFT, data => {
+      console.log(`${data.user.uniqueId} sent gift ${data.giftName} x${data.repeatCount}`);
+    });
+  })
+  .catch(err => {
+    console.error('Failed to connect:', err);
+  });
